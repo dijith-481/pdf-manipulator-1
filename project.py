@@ -349,8 +349,16 @@ def getPagesList(Type, totalPages, Value=None):
             for i in range(1, totalPages, 2):
                 PagesList.append(i)
         elif Type == "c":  # Select custom pages from Value
-            PagesList = [int(x) - 1 for x in Value.split(",")]
-
+            parts = Value.split(",")
+            for part in parts:
+                if "-" in part:
+                    start_str, end_str = part.split("-")
+                    start = int(start_str)
+                    end = int(end_str)
+                    PagesList.extend(range(start - 1, end))
+                else:
+                    page_num = int(part)
+                    PagesList.append(page_num - 1)
         return PagesList  # Return the list of page numbers
     except:
         return "failed retrieving page list"  # Return an error message if something goes wrong
